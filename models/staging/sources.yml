@@ -1,17 +1,13 @@
-version: 2
-
 sources:
   - name: bank_raw
-    database: BANK_DEV  
-    schema: RAW           
+    database: BANK_DEV
+    schema: RAW
     description: "Raw banking data from PostgreSQL"
-    
-    freshness:
-      warn_after: {count: 24, period: hour}
-      error_after: {count: 48, period: hour}
-    
-    loaded_at_field: created_at
-
+    config:
+      freshness:
+        warn_after: {count: 24, period: "hour"}
+        error_after: {count: 48, period: "hour"}
+      loaded_at_field: created_at
     tables:
       - name: accounts
       - name: branches
@@ -22,7 +18,8 @@ sources:
       - name: deposits
       - name: employees
       - name: financial_summary
-        loaded_at_field: report_date
+        config:
+          loaded_at_field: report_date
       - name: loan_payments
       - name: loans
       - name: transactions
