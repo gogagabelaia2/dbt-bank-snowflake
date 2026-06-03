@@ -46,7 +46,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['business', 'checking', 'investment', 'joint', 'savings', 'student']
+                values: ['business', 'checking', 'investment', 'joint', 'savings', 'student','premium']
               config:
                 severity: warn
       - name: currency
