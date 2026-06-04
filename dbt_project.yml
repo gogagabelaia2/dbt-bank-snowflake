@@ -29,21 +29,9 @@ models:
 
     marts:
       +pre-hook:
-        sql: >
-          insert into {{ target.database }}.AUDIT.dbt_audit_log values (
-            '{{ this.name }}',
-            current_timestamp,
-            '{{ target.name }}'
-          )
-        transaction: false
+        - "insert into {{ target.database }}.AUDIT.dbt_audit_log values ('{{ this.name }}', current_timestamp, '{{ target.name }}')"
       +post-hook:
-        sql: >
-          insert into {{ target.database }}.AUDIT.dbt_audit_log values (
-            '{{ this.name }}',
-            current_timestamp,
-            '{{ target.name }}'
-          )
-        transaction: false
+        - "insert into {{ target.database }}.AUDIT.dbt_audit_log values ('{{ this.name }}', current_timestamp, '{{ target.name }}')"
 
       credit:
         +materialized: table
