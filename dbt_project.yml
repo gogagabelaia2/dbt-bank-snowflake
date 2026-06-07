@@ -14,9 +14,6 @@ snapshot-paths: ["snapshots"]
 target-path: "target"
 packages-install-path: "dbt_packages"
 
-on-run-start:
-  - "{{ create_audit_log() }}"
-
 models:
   dbt_bank_snowflake:
 
@@ -28,22 +25,15 @@ models:
       +materialized: ephemeral
 
     marts:
-      +pre-hook:
-        - "insert into {{ target.database }}.AUDIT.dbt_audit_log values ('{{ this.name }}', current_timestamp, '{{ target.name }}')"
-      +post-hook:
-        - "insert into {{ target.database }}.AUDIT.dbt_audit_log values ('{{ this.name }}', current_timestamp, '{{ target.name }}')"
-
       credit:
         +materialized: table
         +schema: credit
-
       finance:
         +materialized: table
         +schema: finance
-
-      customers:
+      customer:
         +materialized: table
-        +schema: customers
+        +schema: customer
 
 seeds:
   dbt_bank_snowflake:
