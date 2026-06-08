@@ -28,16 +28,8 @@ models:
       credit:
         +materialized: table
         +schema: credit
-      finance:
-        +materialized: table
-        +schema: finance
-      customer:
-        +materialized: table
-        +schema: customer
 
-seeds:
-  dbt_bank_snowflake:
-    +schema: seeds
+
 
 snapshots:
   dbt_bank_snowflake:
