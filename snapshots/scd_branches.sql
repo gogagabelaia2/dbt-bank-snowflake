@@ -1,7 +1,7 @@
 {% snapshot scd_branches %}
 {{
     config(
-        target_shcema='snapshot',
+        target_schema='snapshots',
         unique_key='branch_id',
         strategy='check',
         check_cols=['city','country_code','country_name']

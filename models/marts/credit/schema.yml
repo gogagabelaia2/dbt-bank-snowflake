@@ -1,0 +1,123 @@
+version: 2
+
+models:
+
+  - name: fct_loan_portfolio
+    description: " Loan portfolio summary by loan type — NPL ratios, watchlist exposure, and cost of risk metrics for credit risk reporting. "
+    columns:
+      - name: loan_type
+        description: " loan product catrgory "
+        tests:
+          - unique
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['auto', 'business', 'home equity', 'mortgage', 'personal', 'student']
+              config: 
+                severity: warn
+
+      - name: total_loans
+        description: " total number of loans "
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments: 
+                expression: " > 0"
+
+      - name: total_portfolio
+        description: " total outstanding balance "
+        tests:
+          - not_null
+          -  dbt_utils.expression_is_true:
+              arguments: 
+                expression: " > 0"
+      
+      - name: npl_count
+        description: " total non performing loans "
+        tests:
+          - not_null
+
+      - name: npl_balance
+        description: " total non performing balance "
+        tests:
+          - not_null
+
+      - name: npl_ratio
+        description: " non performing loans pct in total loans "
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " between 0 and 100" 
+      
+      - name: watchlist_count
+        description: " total loans where classification is watch substandard "
+        tests:
+          - not_null
+      
+      - name: watchlist_ratio
+        description: " total watchlist pct in  total loans "
+        tests: 
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " between 0 and 100 "
+
+      - name: cost_of_risk_pct
+        description: " Provision amount as percentage of total portfolio — cost of credit risk "
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " between 0 and 100 "
+
+  - name: fct_collateral_coverage
+    description: "Collateral coverage analysis by loan type — LTV ratios, coverage ratios, and undercollateralization metrics"
+    columns:
+      - name: loan_type
+        description: " loan product catrgory "
+        tests:
+          - unique
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['auto', 'business', 'home equity', 'mortgage', 'personal', 'student']
+              config: 
+                severity: warn
+      
+      - name: avg_ltv_pct
+        description: "Average loan-to-value ratio by loan type"
+        tests: 
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " > 0"
+      
+      - name: avg_coverage_ratio
+        description: "Ratio of collateral value to outstanding loan balance"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " > 0"
+
+      - name: undercollateralized_count
+        description: "Number of loans where collateral value is below loan balance"
+        tests:
+          - not_null
+      
+      - name: undercollateralized_pct
+        description: "Percentage of undercollateralized loans in total portfolio"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " between 0 and 100 "
+      
+      - name: avg_collateral_gap
+        description: "Average gap between collateral value and loan balance — negative means undercollateralized"
+        tests:
+          - not_null
+
+
+
