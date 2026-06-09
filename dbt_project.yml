@@ -35,8 +35,6 @@ models:
         +materialized: table
         +schema: finance
 
-
-
 snapshots:
   dbt_bank_snowflake:
     +schema: snapshots
