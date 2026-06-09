@@ -30,7 +30,10 @@ models:
         +schema: credit
       customer:
         +materialized: table
-        +schema: customer 
+        +schema: customer
+      finance:
+        +materialized: table
+        +schema: finance
 
 
 
