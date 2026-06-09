@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: fct_branch_summary
+    description: "Branch-level portfolio summary — loan exposure, NPL metrics, deposit balance and net position for finance reporting"
+    columns:
+      - name: branch_id
+        description: "Unique branch identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: branch_name
+        description: "Branch name"
+        tests:
+          - not_null
+
+      - name: total_loans
+        description: "Total number of loans originated at this branch"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+      - name: total_portfolio
+        description: "Total outstanding loan balance at this branch"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+      - name: npl_count
+        description: "Number of non-performing loans (days past due > 90)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: npl_balance
+        description: "Total outstanding balance of non-performing loans"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: total_deposits
+        description: "Total deposit balance held at this branch"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: npl_ratio
+        description: "NPL balance as percentage of total portfolio"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "between 0 and 100"
+
+      - name: net_position
+        description: "Total deposits minus total portfolio — positive means branch is deposit-funded"
+        tests:
+          - not_null
