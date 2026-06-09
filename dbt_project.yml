@@ -28,6 +28,15 @@ models:
       credit:
         +materialized: table
         +schema: credit
+<<<<<<< Updated upstream
+=======
+      customer:
+        +materialized: table
+        +schema: customer 
+      finance:
+        +materialized: table
+        +schema: finance
+>>>>>>> Stashed changes
 
 
 
