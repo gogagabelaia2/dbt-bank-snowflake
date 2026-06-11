@@ -10,6 +10,7 @@ on:
       - 'snapshots/**'
       - 'dbt_project.yml'
       - 'packages.yml'
+      - 'profiles.yml'
       - '.github/workflows/**'
 
 concurrency:
