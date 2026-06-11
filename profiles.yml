@@ -16,7 +16,7 @@ dbt_bank_snowflake:
       type: snowflake
       account: hpxuzyt-jg59857
       user: "{{ env_var('SNOWFLAKE_USER') }}"
-      private_key: "{{ env_var('SNOWFLAKE_PRIVATE_KEY') }}"
+      private_key_path: /home/runner/.dbt/snowflake_private_key.pem
       role: TRANSFORMER_ROLE
       database: BANK_DEV
       warehouse: WH_DBT_DEV
