@@ -10,6 +10,7 @@ on:
       - 'snapshots/**'
       - 'dbt_project.yml'
       - 'packages.yml'
+      - '.github/workflows/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
