@@ -18,7 +18,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DBT_PROFILES_DIR: .
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      GITHUB_ACTOR: ${{ github.actor }}
 
 jobs:
   dbt-ci:
