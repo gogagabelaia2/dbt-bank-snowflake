@@ -1,0 +1,24 @@
+dbt_bank_snowflake:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: hpxuzyt-jg59857
+      user: GOGAGABELAIA
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: TRANSFORMER_ROLE
+      database: BANK_DEV
+      warehouse: WH_DBT_DEV
+      schema: MARTS
+      threads: 4
+
+    ci:
+      type: snowflake
+      account: hpxuzyt-jg59857
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: TRANSFORMER_ROLE
+      database: BANK_DEV
+      warehouse: WH_DBT_DEV
+      schema: "ci_{{ env_var('GITHUB_ACTOR', 'local') }}"
+      threads: 4
