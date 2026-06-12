@@ -38,8 +38,8 @@ jobs:
       - name: Write private key
         run: |
           mkdir -p ~/.dbt
-          printf '%s' "$SNOWFLAKE_PRIVATE_KEY" > ~/.dbt/snowflake_private_key.pem
-          chmod 600 ~/.dbt/snowflake_private_key.pem 
+          echo "$SNOWFLAKE_PRIVATE_KEY" | base64 -d > ~/.dbt/snowflake_private_key.pem
+          chmod 600 ~/.dbt/snowflake_private_key.pem
 
       - name: Install dbt-fusion
         run: |
