@@ -59,3 +59,44 @@ models:
         description: "Net bank exposure — total outstanding minus total deposits. Negative means customer deposits exceed loans"
         tests:
           - not_null
+
+  - name: fct_customer_ranking
+    description: "Customer 360 view — loan exposure, NPL status, deposit balance and net exposure per customer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+      
+      - name: full_name
+        description: "Customer full name"
+        tests:
+          - not_null
+      
+      - name: total_outstanding
+        description: "Total outstanding loan balance across all loans"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+
+      - name: outstanding_rank
+        description: "Customer rank by total outstanding balance"
+        tests:
+          - not_null
+
+      - name: risk_percentile
+        description: "Customer risk percentile 1-100"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "between 1 and 100"
+
+      - name: cumulative_portfolio
+        description: "Running total of outstanding balance"
+        tests:
+          - not_null  
