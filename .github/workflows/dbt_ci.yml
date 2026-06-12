@@ -1,4 +1,35 @@
-steps:
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'models/**'
+      - 'tests/**'
+      - 'macros/**'
+      - 'snapshots/**'
+      - 'dbt_project.yml'
+      - 'packages.yml'
+      - 'profiles.yml'
+      - '.github/workflows/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DBT_PROFILES_DIR: .
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      GITHUB_ACTOR: ${{ github.actor }}
+
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
