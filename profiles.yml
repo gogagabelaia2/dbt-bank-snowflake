@@ -5,7 +5,7 @@ dbt_bank_snowflake:
       type: snowflake
       account: hpxuzyt-jg59857
       user: GOGAGABELAIA
-      private_key_path: C:\Users\gogag\.dbt\snowflake_private_key.pem
+      password: "Goga2026Dev2026"
       role: TRANSFORMER_ROLE
       database: BANK_DEV
       warehouse: WH_DBT_DEV
