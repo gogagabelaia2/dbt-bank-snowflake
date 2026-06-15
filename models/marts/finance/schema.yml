@@ -67,3 +67,26 @@ models:
         description: "Total deposits minus total portfolio — positive means branch is deposit-funded"
         tests:
           - not_null
+
+
+  - name: fct_transactions_mom
+    description: "month over month  transaction volume"
+    columns:
+      - name: month
+        description: " transaction month "
+        tests:
+          - not_null
+      
+      - name: total_volume
+        description: " total amount of transaction "
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: " > 0"
+
+      - name: prev_month_volume
+        description: " previous month total amount ordered by month  "
+
+      - name: volume_growth_pct
+        description: " Percentage change in total volume over months "
