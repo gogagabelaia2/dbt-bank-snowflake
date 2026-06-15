@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: fct_customer_summary
+    description: "Customer 360 view — loan exposure, NPL status, deposit balance and net exposure per customer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: full_name
+        description: "Customer full name"
+        tests:
+          - not_null
+
+      - name: total_loans
+        description: "Total number of active loans per customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+      - name: total_outstanding
+        description: "Total outstanding loan balance"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: has_npl
+        description: "1 if customer has at least one loan with days past due > 90, else 0"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: npl_balance
+        description: "Total outstanding balance of NPL loans"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: total_deposits
+        description: "Total deposit balance across all accounts"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+      - name: net_exposure
+        description: "Net bank exposure — total outstanding minus total deposits. Negative means customer deposits exceed loans"
+        tests:
+          - not_null
+
+  - name: fct_customer_ranking
+    description: "Customer 360 view — loan exposure, NPL status, deposit balance and net exposure per customer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+      
+      - name: full_name
+        description: "Customer full name"
+        tests:
+          - not_null
+      
+      - name: total_outstanding
+        description: "Total outstanding loan balance across all loans"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+
+      - name: outstanding_rank
+        description: "Customer rank by total outstanding balance"
+        tests:
+          - not_null
+
+      - name: risk_percentile
+        description: "Customer risk percentile 1-100"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "between 1 and 100"
+
+      - name: cumulative_portfolio
+        description: "Running total of outstanding balance"
+        tests:
+          - not_null  
