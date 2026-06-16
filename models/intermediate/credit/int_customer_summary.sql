@@ -40,19 +40,20 @@ deposits_agg as (
     from deposits
     group by customer_id
 ),
+   
 final as(
     select 
-        l.customer_id,
+        c.customer_id,
         c.full_name,
-        l.total_loans,
-        l.total_outstanding,
-        l.has_npl,
-        l.npl_balance,
-        coalesce(d.total_deposits,0) as total_deposits,
-        (l.total_outstanding - coalesce(d.total_deposits,0)) as net_exposure
-    from loans_agg l 
-    left join deposits_agg d on l.customer_id=d.customer_id   
-    left join customers c on l.customer_id=c.customer_id 
-    
-)
-select * from final
+        coalesce(l.total_loans, 0)       as total_loans,
+        coalesce(l.total_outstanding, 0) as total_outstanding,
+        coalesce(l.has_npl, 0)           as has_npl,
+        coalesce(l.npl_balance, 0)       as npl_balance,
+        coalesce(d.total_deposits, 0)    as total_deposits,
+        coalesce(l.total_outstanding, 0) 
+            - coalesce(d.total_deposits, 0) as net_exposure
+    from customers c
+    left join loans_agg l    on c.customer_id = l.customer_id
+    left join deposits_agg d on c.customer_id = d.customer_id
+
+)select * from final

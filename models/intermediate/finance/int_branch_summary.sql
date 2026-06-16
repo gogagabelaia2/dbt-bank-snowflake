@@ -49,15 +49,17 @@ final as(
     select 
         b.branch_id,
         b.branch_name,
-        l.total_loans,
-        l.total_portfolio,
-        l.npl_count,
-        l.npl_balance,
-        d.total_deposits,
-        round(l.npl_balance * 100.0 / nullif(l.total_portfolio, 0), 2) as npl_ratio,
-        coalesce(d.total_deposits, 0) - l.total_portfolio               as net_position
-    from loans_agg l
-    left join deposits_agg d on l.branch_id=d.branch_id
-    left join branches b on l.branch_id = b.branch_id
+        coalesce(l.total_loans, 0)    as total_loans,
+        coalesce(l.total_portfolio, 0) as total_portfolio,
+        coalesce(l.npl_count, 0)      as npl_count,
+        coalesce(l.npl_balance, 0)    as npl_balance,
+        coalesce(d.total_deposits, 0) as total_deposits,
+        round(coalesce(l.npl_balance, 0) * 100.0 
+            / nullif(coalesce(l.total_portfolio, 0), 0), 2) as npl_ratio,
+        coalesce(d.total_deposits, 0) 
+            - coalesce(l.total_portfolio, 0) as net_position
+    from branches b
+    left join loans_agg l    on b.branch_id = l.branch_id
+    left join deposits_agg d on b.branch_id = d.branch_id
 )
 select * from final

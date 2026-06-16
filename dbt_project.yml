@@ -28,7 +28,7 @@ models:
       credit:
         +materialized: table
         +schema: credit
-      customer:
+      customers:
         +materialized: table
         +schema: customer
       finance:
