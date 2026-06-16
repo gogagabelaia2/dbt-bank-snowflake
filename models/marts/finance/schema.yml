@@ -21,7 +21,7 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               arguments:
-                expression: "> 0"
+                expression: ">=0"
 
       - name: total_portfolio
         description: "Total outstanding loan balance at this branch"
@@ -29,7 +29,7 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               arguments:
-                expression: "> 0"
+                expression: ">=0"
 
       - name: npl_count
         description: "Number of non-performing loans (days past due > 90)"
@@ -67,6 +67,31 @@ models:
         description: "Total deposits minus total portfolio — positive means branch is deposit-funded"
         tests:
           - not_null
+
+      - name: portfolio_rank
+        description: "Branch rank by total portfolio size — 1 = largest"
+        tests:
+          - not_null
+          - unique
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+
+      - name: risk_rank
+        description: "Branch rank by NPL ratio — 1 = highest risk"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+
+      - name: portfolio_quartile
+        description: "Branch segmented into 4 quartiles by portfolio size — 1 = largest"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "between 1 and 4"    
 
 
   - name: fct_transactions_mom

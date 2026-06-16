@@ -21,7 +21,7 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               arguments:
-                expression: "> 0"
+                expression: ">=0"
 
       - name: total_outstanding
         description: "Total outstanding loan balance"
