@@ -3,13 +3,13 @@ with transactions as(
         transaction_id,
         account_id,
         transaction_date
-    from {{ref('stg_transactions')}}
+    from {{ ref('stg_transactions') }}
 ),
 accounts as(
     select
         account_id,
         opened_date
-    from {{ref('stg_accounts')}}
+    from {{ ref('stg_accounts') }}
 ),
 joins as(
     select
@@ -17,8 +17,8 @@ joins as(
         t.transaction_date,
         ac.account_id,
         ac.opened_date 
-    from transactions t 
-    left join accounts ac on t.account_id=ac.account_id
+    from transactions as t 
+    left join accounts as ac on t.account_id=ac.account_id
 ),
 final as(
     select 

@@ -3,7 +3,7 @@ with monthly_volume as(
         month,
         total_volume,
         lag(total_volume) over (order by month ) as prev_month_volume
-    from {{ref('int_transactions_monthly')}}
+    from {{ ref('int_transactions_monthly') }}
 ),
 growth_pct as(
     select

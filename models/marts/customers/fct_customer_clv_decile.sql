@@ -3,7 +3,7 @@ with transactions as(
         transaction_id,
         customer_id,
         amount
-    from {{ref('stg_transactions')}}
+    from {{ ref('stg_transactions') }}
 ),
 agg_transactions as(
     select 
