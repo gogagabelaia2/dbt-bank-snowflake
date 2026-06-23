@@ -19,7 +19,7 @@ sources:
       - name: employees
       - name: financial_summary
         config:
-          loaded_at_field: report_date
+          loaded_at_field:  "report_date::timestamp"
       - name: loan_payments
       - name: loans
       - name: transactions
