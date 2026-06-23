@@ -1,11 +1,11 @@
-name: dbt CI
+name: dbt Deploy
 
 on:
-  pull_request:
-    branches: [develop]
+  push:
+    branches: [main]
 
 jobs:
-  dbt-ci:
+  dbt-deploy:
     runs-on: ubuntu-latest
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -30,8 +30,12 @@ jobs:
       - name: dbt deps
         run: dbt deps
 
-      - name: dbt debug
-        run: dbt debug --target ci
+      - name: dbt build (production)
+        run: dbt build --target prod
 
-      - name: dbt build
-        run: dbt build --target ci --fail-fast
+      - name: Upload manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-manifest
+          path: target/manifest.json
+          retention-days: 30
