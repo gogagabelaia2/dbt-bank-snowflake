@@ -2,7 +2,7 @@ with customers as(
     select
         customer_id,
         first_name ||' '|| last_name as full_name
-    from {{ref('stg_customers')}}
+    from {{ ref('stg_customers') }}
 ),
 loans as(
     select
@@ -11,14 +11,14 @@ loans as(
         outstanding_balance,
         original_amount,
         days_past_due
-    from {{ref('stg_loans')}}
+    from {{ ref('stg_loans') }}
 ),
 deposits as(
     select
         deposit_id,
         customer_id,
         principal_amount
-    from {{ref('stg_deposits')}}
+    from {{ ref('stg_deposits') }}
 ),
 loans_agg as (
     select
@@ -52,8 +52,8 @@ final as(
         coalesce(d.total_deposits, 0)    as total_deposits,
         coalesce(l.total_outstanding, 0) 
             - coalesce(d.total_deposits, 0) as net_exposure
-    from customers c
-    left join loans_agg l    on c.customer_id = l.customer_id
-    left join deposits_agg d on c.customer_id = d.customer_id
+    from customers as c
+    left join loans_agg as l    on c.customer_id = l.customer_id
+    left join deposits_agg as d on c.customer_id = d.customer_id
 
 )select * from final

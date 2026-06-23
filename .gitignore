@@ -5,3 +5,5 @@ logs/
 .env
 dbt_internal_packages/
 *.zip
+.venv/
+.venv/

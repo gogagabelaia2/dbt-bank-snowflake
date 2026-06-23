@@ -29,8 +29,8 @@ table_joins as (
         co.collateral_id,
         co.collateral_type,
         co.current_value
-    from loans l
-    left join collateral co on co.loan_id = l.loan_id
+    from loans as l
+    left join collateral as co on co.loan_id = l.loan_id
 ),
 
 calculations as (
