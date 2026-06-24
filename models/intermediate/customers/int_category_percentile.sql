@@ -4,7 +4,7 @@ with transactions as(
         account_id,
         transaction_category,
         amount
-from {{ref('stg_transactions')}}
+from {{ ref('stg_transactions') }}
 )
 select 
     transaction_id,

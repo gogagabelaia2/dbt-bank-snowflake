@@ -2,7 +2,7 @@ with branches as(
     select 
         branch_id,
         branch_name
-    from {{ref('stg_branches')}}
+    from {{ ref('stg_branches') }}
 ),
 loans as(
     select 
@@ -10,20 +10,20 @@ loans as(
         account_id,
         outstanding_balance,
         days_past_due
-    from {{ref('stg_loans')}}
+    from {{ ref('stg_loans') }}
 ),
 accounts as(
     select 
         account_id,
         branch_id
-    from {{ref('stg_accounts')}}
+    from {{ ref('stg_accounts') }}
 ),
 deposits as(
     select 
         deposit_id,
         account_id,
         principal_amount
-    from {{ref('stg_deposits')}}
+    from {{ ref('stg_deposits') }}
 ),
 loans_agg as (
     select
@@ -33,16 +33,16 @@ loans_agg as (
         count(case when l.days_past_due > 90 then 1 end)       as npl_count,
         sum(case when l.days_past_due > 90 
             then l.outstanding_balance else 0 end)             as npl_balance
-    from loans l
-    join accounts a on l.account_id = a.account_id
+    from loans as l
+    inner join accounts as a on l.account_id = a.account_id
     group by a.branch_id
 ),
 deposits_agg as (
     select
         a.branch_id,
         sum(d.principal_amount) as total_deposits
-    from deposits d
-    join accounts a on d.account_id = a.account_id
+    from deposits as d
+    inner join accounts as a on d.account_id = a.account_id
     group by a.branch_id
 ),
 final as(
@@ -58,8 +58,8 @@ final as(
             / nullif(coalesce(l.total_portfolio, 0), 0), 2) as npl_ratio,
         coalesce(d.total_deposits, 0) 
             - coalesce(l.total_portfolio, 0) as net_position
-    from branches b
-    left join loans_agg l    on b.branch_id = l.branch_id
-    left join deposits_agg d on b.branch_id = d.branch_id
+    from branches as b
+    left join loans_agg as l    on b.branch_id = l.branch_id
+    left join deposits_agg as d on b.branch_id = d.branch_id
 )
 select * from final
