@@ -30,8 +30,33 @@ jobs:
       - name: dbt deps
         run: dbt deps
 
-      - name: dbt debug
-        run: dbt debug --target ci
+      - name: Download prod manifest
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: dbt_deploy.yml
+          name: prod-manifest
+          path: ./prod-artifacts
+          if_no_artifact_found: warn
 
-      - name: dbt build
+      - name: Check manifest
+        id: check
+        run: |
+          if [ -f ./prod-artifacts/manifest.json ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: dbt build (Slim CI)
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          dbt build \
+            --target ci \
+            --select state:modified+ \
+            --defer \
+            --state ./prod-artifacts \
+            --fail-fast
+
+      - name: dbt build (Full)
+        if: steps.check.outputs.exists == 'false'
         run: dbt build --target ci --fail-fast
