@@ -7,3 +7,10 @@ dbt_internal_packages/
 *.zip
 .venv/
 .venv/
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
